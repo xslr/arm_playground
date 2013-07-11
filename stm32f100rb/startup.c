@@ -1,8 +1,21 @@
 
-void default_handler()
-{}
+extern void main();
 
-void reset_handler()              __attribute__ ((weak, alias ("default_handler")));
+void init_clock()
+{
+}
+
+void reset_init()
+{
+  init_clock();
+  main();
+}
+
+void __attribute__ ((interrupt("IRQ"))) default_handler()
+{
+}
+
+void reset_handler()              __attribute__ ((weak, alias ("reset_init")));
 void nmi_handler()                __attribute__ ((weak, alias ("default_handler")));
 void hardfault_handler()          __attribute__ ((weak, alias ("default_handler")));
 void memmanage_handler()          __attribute__ ((weak, alias ("default_handler")));
@@ -67,7 +80,7 @@ void dma2_c3_handler()            __attribute__ ((weak, alias ("default_handler"
 void dma2_c4_c5_handler()         __attribute__ ((weak, alias ("default_handler")));
 void dma2_c5_handler()            __attribute__ ((weak, alias ("default_handler")));
 
-void * interrupt_vector_table[] =
+void * interrupt_vector_table[] __attribute__ ((section(".vectors"))) =
 {
   0,
   reset_handler,
