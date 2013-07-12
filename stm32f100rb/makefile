@@ -7,9 +7,9 @@ SIZE = $(TCHAIN)-size
 CFLAGS_ = $(CFLAGS) -march=armv7-m -mcpu=cortex-m3 -mthumb -mfloat-abi=soft -Wall -g -O0
 LDFLAGS_ = $(LDFLAGS) -nostartfiles
 
-all: base_demo.bin sizelist
+all: basic_reset.bin sizelist
 
-sizelist: base_demo.elf
+sizelist: basic_reset.elf
 	$(SIZE) $<
 
 %.bin: %.elf
@@ -18,8 +18,8 @@ sizelist: base_demo.elf
 %.srec: %.elf
 	$(OCP) -O srec $< $@
 
-base_demo.elf: main.o startup.o stm32f100rb.ld
-	$(LD) $(LDFLAGS_) -Tstm32f100rb.ld -o $@ main.o startup.o
+%.elf: %.o startup.o stm32f100rb.ld
+	$(LD) $(LDFLAGS_) -Tstm32f100rb.ld -o $@ $< startup.o
 
 %.o: %.c
 	$(CC) $(CFLAGS_) -c -o $@ $<
