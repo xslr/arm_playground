@@ -1,9 +1,16 @@
+
+#include "register.h"
+
 #define STACK_TOP 0x20000800
 
 extern void main();
 
 void init_clock()
-{}
+{
+  RCC_CFGR = 0x00110002;
+  RCC_APB2ENR = 0x00000010;
+  RCC_CR = 0x01000000;
+}
 
 void reset_init()
 {
